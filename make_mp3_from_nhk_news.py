@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/06/06 11:06:42 (UT+08:00) daisuke>
+# Time-stamp: <2025/06/06 11:42:10 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -52,7 +52,7 @@ voice_name      = dic_voice[voice_gender]
 command_edgetts = args.edgetts
 
 # checking URL
-if not ('https://www3.nhk.or.jp/news/html/' in url_nhk):
+if not ('https://www3.nhk.or.jp/' in url_nhk):
     # printing a message
     print ("ERROR:")
     print ("ERROR: specified URL is not for NHK news article.")
