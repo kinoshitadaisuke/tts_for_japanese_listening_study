@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/06/06 12:47:44 (UT+08:00) daisuke>
+# Time-stamp: <2025/06/06 13:16:50 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -74,6 +74,7 @@ html_article_body  = soup.find ('div', class_='content--detail-body')
 # converting HTML into plain text
 text_article_title = html_article_title.get_text ()
 text_article_body  = html_article_body.get_text ()
+text_article_title = text_article_title.replace (' ', '\n')
 
 # writing extracted plain text into a file
 with open (file_text, 'w') as fh_out:
