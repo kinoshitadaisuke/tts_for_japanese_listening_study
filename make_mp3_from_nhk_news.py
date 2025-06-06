@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/06/06 11:42:10 (UT+08:00) daisuke>
+# Time-stamp: <2025/06/06 12:47:44 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -78,6 +78,7 @@ text_article_body  = html_article_body.get_text ()
 # writing extracted plain text into a file
 with open (file_text, 'w') as fh_out:
     fh_out.write (text_article_title)
+    fh_out.write (f'\n\n')
     fh_out.write (text_article_body)
 
 # executing edge-tts command to make MP3 file
