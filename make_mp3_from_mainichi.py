@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/10/22 22:20:55 (UT+08:00) daisuke>
+# Time-stamp: <2025/10/22 22:22:16 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -133,4 +133,4 @@ async def make_mp3 (text, voice, file_output):
     await communicate.save (file_output)
     
 # making MP3 file
-await make_mp3 (text_article, voice_name, file_audio)
+make_mp3 (text_article, voice_name, file_audio)
