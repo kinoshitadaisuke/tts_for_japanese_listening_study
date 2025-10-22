@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/10/15 21:11:30 (UT+08:00) daisuke>
+# Time-stamp: <2025/10/22 22:20:55 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -18,6 +18,9 @@ import bs4
 
 # importing edge_tts module
 import edge_tts
+
+# import asyncio module
+import asyncio
 
 # initialising a parser
 descr  = f'Downloading Mainichi article and generating MP3 file'
@@ -125,6 +128,9 @@ text_article = f'{text_article_title}\n\n{text_article_body}'
 with open (file_text, 'w') as fh_out:
     fh_out.write (text_article)
 
+async def make_mp3 (text, voice, file_output):
+    communicate = edge_tts.Communicate (text, voice)
+    await communicate.save (file_output)
+    
 # making MP3 file
-communicate = edge_tts.Communicate (text_article, voice_name)
-communicate.save_sync (file_audio)
+await make_mp3 (text_article, voice_name, file_audio)
