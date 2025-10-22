@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/10/22 22:22:16 (UT+08:00) daisuke>
+# Time-stamp: <2025/10/22 22:25:47 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -128,9 +128,13 @@ text_article = f'{text_article_title}\n\n{text_article_body}'
 with open (file_text, 'w') as fh_out:
     fh_out.write (text_article)
 
-async def make_mp3 (text, voice, file_output):
+#async def make_mp3 (text, voice, file_output):
+#    communicate = edge_tts.Communicate (text, voice)
+#    await communicate.save (file_output)
+
+def make_mp3 (text, voice, file_output):
     communicate = edge_tts.Communicate (text, voice)
-    await communicate.save (file_output)
-    
+    communicate.save_sync (file_output)
+
 # making MP3 file
 make_mp3 (text_article, voice_name, file_audio)
