@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/10/29 20:59:31 (UT+08:00) daisuke>
+# Time-stamp: <2025/10/29 21:44:34 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -19,8 +19,11 @@ import bs4
 # importing edge_tts module
 import edge_tts
 
-# import asyncio module
+# importing asyncio module
 import asyncio
+
+# importing nest_asyncio module
+import nest_asyncio
 
 # initialising a parser
 descr  = f'Downloading Mainichi article and generating MP3 file'
@@ -123,6 +126,9 @@ else:
 
 # combining title and body
 text_article = f'{text_article_title}\n\n{text_article_body}'
+
+# nest_asyncio
+nest_asyncio.apply ()
 
 # writing extracted plain text into a file
 with open (file_text, 'w') as fh_out:
