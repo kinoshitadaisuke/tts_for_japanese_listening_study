@@ -1,7 +1,7 @@
 #!/usr/pkg/bin/python3.13
 
 #
-# Time-stamp: <2025/10/22 22:25:47 (UT+08:00) daisuke>
+# Time-stamp: <2025/10/30 09:28:00 (UT+08:00) daisuke>
 #
 
 # importing argparse module
@@ -19,14 +19,25 @@ import bs4
 # importing edge_tts module
 import edge_tts
 
-# import asyncio module
+# importing asyncio module
 import asyncio
+
+# importing nest_asyncio module
+import nest_asyncio
+
+# importing pathlib module
+import pathlib
+
+# importing gtts module
+import gtts.cli
 
 # initialising a parser
 descr  = f'Downloading Mainichi article and generating MP3 file'
 parser = argparse.ArgumentParser (description=descr)
 
 # adding arguments
+list_tts = ['edge', 'gtts']
+list_lang = ['ja']
 list_gender = ['female', 'male']
 dic_voice = {
     'female': 'ja-JP-NanamiNeural',
@@ -34,25 +45,29 @@ dic_voice = {
 }
 parser.add_argument ('-u', '--url', default='', \
                      help='URL of Mainichi article')
-parser.add_argument ('-t', '--text', default='mainichi.txt', \
-                     help='output text file')
+parser.add_argument ('-t', '--tts', choices=list_tts, default='gtts', \
+                     help='text-to-speech engine (default: gtts)')
 parser.add_argument ('-a', '--audio', default='mainichi.mp3', \
                      help='output audio file')
 parser.add_argument ('-g', '--gender', choices=list_gender, default='female', \
                      help='gender of synthesised speech (female or male)')
-parser.add_argument ('-e', '--edgetts', default='edge-tts', \
-                     help='edge-tts command')
+parser.add_argument ('-l', '--lang', choices=list_lang, default='ja', \
+                     help='language option for gtts (default: ja)')
 
 # parsing arguments
 args = parser.parse_args ()
 
 # input parameters
-url_mainichi    = args.url
-file_text       = args.text
-file_audio      = args.audio
-voice_gender    = args.gender
-voice_name      = dic_voice[voice_gender]
-command_edgetts = args.edgetts
+url_mainichi = args.url
+file_audio   = args.audio
+tts_engine   = args.tts
+language     = args.lang
+voice_gender = args.gender
+voice_name   = dic_voice[voice_gender]
+
+# text file name
+path_audio = pathlib.Path (file_audio)
+file_text = path_audio.stem + '.txt'
 
 # checking URL
 if not ('https://mainichi.jp/' in url_mainichi):
@@ -128,13 +143,19 @@ text_article = f'{text_article_title}\n\n{text_article_body}'
 with open (file_text, 'w') as fh_out:
     fh_out.write (text_article)
 
-#async def make_mp3 (text, voice, file_output):
-#    communicate = edge_tts.Communicate (text, voice)
-#    await communicate.save (file_output)
+if (tts_engine == 'edge'):
+    async def make_mp3_async (text, voice, file_output):
+        communicate = edge_tts.Communicate (text, voice)
+        await communicate.save (file_output)
 
-def make_mp3 (text, voice, file_output):
-    communicate = edge_tts.Communicate (text, voice)
-    communicate.save_sync (file_output)
+    #def make_mp3 (text, voice, file_output):
+    #    communicate = edge_tts.Communicate (text, voice)
+    #    communicate.save_sync (file_output)
 
-# making MP3 file
-make_mp3 (text_article, voice_name, file_audio)
+    # making MP3 file
+    asyncio.run (make_mp3_async (text_article, voice_name, file_audio))
+    #make_mp3 (text_article, voice_name, file_audio)
+elif (tts_engine == 'gtts'):
+    tts = gtts.gTTS (text=text_article, lang=language, tld='com')
+    with open (file_audio, 'wb') as fh_out:
+        tts.write_to_fp (fh_out)
